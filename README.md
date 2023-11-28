@@ -3,7 +3,7 @@ A custom Nanoleaf API for extended use or custom controller apps.
 
 # Setup
 1. Set your IP and Token in `nanoleaf-config.py`
-2. Create an `API Start Animation` animation in your Nanoleaf Scenes (optional, remove in line ´95´ if not used)
+2. Create an `API Start Animation` animation in your Nanoleaf Scenes (optional, remove in line `95` if not used)
 3. Run `nanoleaf-service.py`
 4. Have fun!
 
