@@ -1,2 +1,2 @@
-TOKEN = "deNKQ0I6Hk4B09wQBUSFIfnlUGiRH6RN"
-IP = "192.168.0.70"
+TOKEN = ""
+IP = ""
