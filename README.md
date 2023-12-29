@@ -1,5 +1,5 @@
 # nanoleaf-api
-A custom Nanoleaf API for extended use or custom controller apps.
+A custom Nanoleaf API for extended use or custom controller apps ([App example](https://github.com/Deutscher775/PyLeaf)).
 
 # Setup
 1. Set your IP and Token in `nanoleaf-config.py`
