@@ -1,14 +1,20 @@
 import pathlib
 import time
 import nanoleafapi
+import requests
+
 import nanoleaf_config
 import fastapi
 import uvicorn
+from nanoleafapi import discovery
 
 api = fastapi.FastAPI()
 
+#disc = discovery.discover_devices()
+#print(disc)
 nl = nanoleafapi.Nanoleaf(ip=nanoleaf_config.IP, auth_token=nanoleaf_config.TOKEN, print_errors=True)
 nl_panels = nanoleafapi.NanoleafDigitalTwin(nl)
+
 
 
 @api.post("/power")
@@ -17,8 +23,10 @@ def power(state: bool = None):
         pass
     elif state is True:
         nl.power_on()
+        return fastapi.responses.JSONResponse({"state": True}, status_code=200)
     elif state is False:
         nl.power_off()
+        return fastapi.responses.JSONResponse({"state": False}, status_code=200)
 
 
 @api.post("/panels/sync")
@@ -84,9 +92,32 @@ def get():
     data_get.pop("discovery")
     return data_get
 
-effect = nl.get_current_effect()
-nl.set_effect("API Start Animation")
-time.sleep(3)
-nl.set_effect(effect)
+
+@api.get("/get/effect")
+def get_effect(effect: str):
+    r = requests.put(f"http://{nanoleaf_config.IP}:16021/api/v1/{nanoleaf_config.TOKEN}/effects",
+                     json={"write": {"command": "request", "animName": effect}})
+    return r.json()
+
+
+@api.get("/get/effect/colortheme")
+def get_effect_colortheme():
+    hue_list = {}
+    effectslist = requests.get(f"http://localhost:9931/get").json()["effects"]["effectsList"]
+    for effect in effectslist:
+        r = requests.put(f"http://{nanoleaf_config.IP}:16021/api/v1/{nanoleaf_config.TOKEN}/effects",
+                         json={"write": {"command": "request", "animName": effect}})
+        palette = r.json()["palette"]
+        hue_list[effect] = [palette[0], palette[-1]]
+    return hue_list
+
+def start_anim():
+    effect = nl.get_current_effect()
+    nl.set_effect("API Start Animation")
+    time.sleep(3)
+    nl.set_effect(effect)
+
+
+start_anim()
 
 uvicorn.run(api, host="localhost", port=9931)
