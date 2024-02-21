@@ -1,4 +1,4 @@
-# nanoleaf-api
+# PyLeafAPI
 A custom Nanoleaf API for extended use or custom controller apps ([App example](https://github.com/Deutscher775/PyLeaf)).
 
 # Setup
